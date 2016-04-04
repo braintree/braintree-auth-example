@@ -18,6 +18,7 @@ GEM
     braintree (2.54.0)
       builder (>= 2.0.0)
     builder (3.2.2)
+    dotenv (2.1.1)
     i18n (0.7.0)
     json (1.8.3)
     kgio (2.10.0)
@@ -56,6 +57,7 @@ PLATFORMS
 
 DEPENDENCIES
   braintree (= 2.54.0)
+  dotenv (= 2.1.1)
   pg (= 0.18.2)
   rake (= 10.4.2)
   remote_syslog_logger (= 1.0.3)

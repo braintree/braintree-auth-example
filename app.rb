@@ -4,12 +4,10 @@ require 'json'
 
 require 'uri'
 require 'braintree'
+require 'dotenv'
+Dotenv.load
 
-if ENV['DATABASE_URL']
-  ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'])
-else
-  set :database, {:adapter => "sqlite3", :database => "db/development.sqlite3"}
-end
+set :database, ENV['DATABASE_URL'] || {:adapter => "sqlite3", :database => "db/development.sqlite3"}
 
 Dir[File.dirname(__FILE__) + "/models/*.rb"].each { |file| require file }
 
@@ -40,7 +38,7 @@ get '/merchant/:public_id' do |public_id|
   unless @merchant.braintree_id.present?
     @merchant.update_attributes!(:state => SecureRandom.hex(10))
     @connect_url = gateway.oauth.connect_url(
-      :redirect_uri => "http://localhost:4567/callback",
+      :redirect_uri => ENV['REDIRECT_URI'],
       :scope => "read_write",
       :state => @merchant.state,
       :user => {
@@ -135,8 +133,8 @@ end
 
 def _oauth_gateway
   Braintree::Gateway.new({
-    :client_id => "client_id$sandbox$p3zmj2rkc7cjjbhd",
-    :client_secret => "client_secret$sandbox$bf38296736ddb188f4e5dfd258889430",
+    :client_id => ENV["CLIENT_ID"],
+    :client_secret => ENV["CLIENT_SECRET"],
     :environment => "sandbox",
   })
 end
