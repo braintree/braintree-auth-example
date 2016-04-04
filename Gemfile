@@ -9,6 +9,10 @@ group :development, :test do
   gem "sqlite3", "1.3.11"
 end
 
+group :production do
+  gem 'pg', '0.18.2'
+end
+
 gem "sinatra", "1.4.6"
 gem "sinatra-activerecord", "2.0.9"
 gem "rake", "10.4.2"

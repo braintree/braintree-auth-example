@@ -22,6 +22,7 @@ GEM
     json (1.8.3)
     kgio (2.10.0)
     minitest (5.8.2)
+    pg (0.18.2)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
@@ -55,6 +56,7 @@ PLATFORMS
 
 DEPENDENCIES
   braintree (= 2.54.0)
+  pg (= 0.18.2)
   rake (= 10.4.2)
   remote_syslog_logger (= 1.0.3)
   sass (= 3.4.22)

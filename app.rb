@@ -5,10 +5,13 @@ require 'json'
 require 'uri'
 require 'braintree'
 
-set :database, {:adapter => "sqlite3", :database => "db/development.sqlite3"}
+if ENV['DATABASE_URL']
+  ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'])
+else
+  set :database, {:adapter => "sqlite3", :database => "db/development.sqlite3"}
+end
 
 Dir[File.dirname(__FILE__) + "/models/*.rb"].each { |file| require file }
-
 
 get '/' do
   @slug = rand(10000)
