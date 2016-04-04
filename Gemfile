@@ -5,9 +5,12 @@ group :development do
   gem "sass", "3.4.22"
 end
 
+group :development, :test do
+  gem "sqlite3", "1.3.11"
+end
+
 gem "sinatra", "1.4.6"
 gem "sinatra-activerecord", "2.0.9"
-gem "sqlite3", "1.3.11"
 gem "rake", "10.4.2"
 
 gem "braintree", "2.54.0"
