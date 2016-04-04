@@ -1,0 +1,17 @@
+.company {
+  font-family: "Open Sans Regular", "Helvetica Neue", Helvetica, Arial, Sans-serif;
+  font-size: 21px;
+
+  & span {
+    font-family: "Open Sans Semibold", "Helvetica Neue", Helvetica, Arial, Sans-serif;
+
+  }
+
+  header & {
+    color: #fff;
+    font-size: 21px;
+    float: left;
+    position: absolute;
+    z-index: 999;
+  }
+}

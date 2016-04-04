@@ -1,0 +1,102 @@
+/* Shared */
+body {
+  background-color: $color-lightest;
+
+  &.signup {
+    background-color: #fff;
+  }
+}
+
+header {
+  background-color: $color-dark;
+  line-height: 80px;
+  height: 80px;
+
+  p {
+    margin: 0;
+    color: $color-lighter;
+    font-size: 13px;
+  }
+}
+
+aside {
+  padding: 2.6em 0 3em;
+
+  p {
+    margin-top: .5em;
+  }
+}
+
+.introduction {
+  margin-bottom: 60px;
+}
+
+/* Sign Up */
+.signup {
+  border-top: solid 3px $color-dark;
+
+  .middle p {
+    margin-top: 2.95em;
+  }
+}
+
+/* Connect */
+.paypal-braintree {
+  .paypal-logo {
+    margin-bottom: 1em;
+    float: left;
+    height: 30px;
+  }
+
+  p {
+    display: block;
+    clear: both;
+    max-width: 27em;
+
+    a {
+      font-family: "Open Sans Semibold", "Helvetica Neue", Helvetica, Arial, Sans-serif;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  ul {
+    margin: -2px 0 10px;
+    float: right;
+  }
+
+  li {
+    background: url(/assets/images/icons/visa.png) center center no-repeat #fff;
+    background-size: 44px auto;
+    float: left;
+    display: inline-block;
+    margin-left: 4px;
+    width: 46px;
+    height: 30px;
+    border: solid 1px #D1CED4;
+    text-indent: -999em;
+    border-radius: 1px;
+
+    &.mastercard { background-image: url(/assets/images/icons/mastercard.png); }
+    &.amex { background-image: url(/assets/images/icons/amex.png); }
+    &.discover { background-image: url(/assets/images/icons/discover.png); }
+    &.paypal { background-image: url(/assets/images/icons/paypal.png); }
+  }
+}
+
+.braintree-button {
+  display: inline-block;
+  margin-top: 1.5em;
+
+  img {
+    float: left;
+  }
+}
+
+/* Connected */
+.tokens {
+
+}

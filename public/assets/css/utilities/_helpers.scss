@@ -1,0 +1,26 @@
+.hide {
+  display: none;
+}
+.center {
+  text-align: center;
+}
+.left {
+  float: left;
+}
+.right {
+  float: right;
+}
+.middle-wrapper {
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+.middle {
+  display: table-cell;
+  vertical-align: middle;
+  padding: 1em 0 1em;
+}
+.pseudo-element {
+  content: '';
+  display: block;
+}

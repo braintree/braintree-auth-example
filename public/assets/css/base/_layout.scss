@@ -1,0 +1,38 @@
+/* structure */
+.container {
+  @include clearfix;
+  text-align: left;
+  margin: 0 auto;
+  position: relative;
+  width: 100%;
+  max-width: 65em;
+  margin: 0 auto;
+  padding: 0 3em;
+  box-sizing: border-box;
+
+  & > section {
+    padding: 50px;
+    background-color: #fff;
+    border: solid 1px $color-subtle;
+    position: relative;
+    z-index: 1;
+  }
+}
+.content {
+  float: left;
+  padding: 40px 60px;
+  text-align: left;
+}
+
+/* grid */
+.row {
+  clear: both;
+  width: 100%;
+}
+.column {
+  float: left;
+
+  &.half {
+    width: 50%;
+  }
+}

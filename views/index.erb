@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PseudoShop</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="assets/css/global.css">
+  </head>
+  <body class="signup">
+    <div class="middle-wrapper">
+      <div class="middle">
+        <div class="container">
+          <div class="company">Pseudo<span>Shop</span></div>
+
+          <h1>Set up shop. <span>Get paid.</span></h1>
+
+          <p>Open a demo shop and see how easy payments can be activated for your users</p>
+
+          <form method="POST" action="/merchants">
+            <label>
+              <span>Email</span>
+              <input type="email" name="email" class="validate" size=37 value="" required autofocus>
+            </label>
+
+            <button class="button primary" type="submit">Get Started<em></em></button>
+            <!-- <input class="button primary" type="submit" value="Get Started"> -->
+
+            <div class="bar">
+              <div class="container">
+                <ul>
+                  <li>
+                    <div class="select-container">
+                      <select name="merchant[country_code_alpha3]">
+                        <option value="USA">United States</option>
+                      </select>
+                    </div>
+                  </li>
+                  <li class="braintree">
+                    <div class="braintree-partners">Braintree_partners</div>
+                  </li>
+                </div>
+              </ul>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="/assets/javascript/vendor/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="/assets/javascript/global.js"></script>
+  </body>
+</html>

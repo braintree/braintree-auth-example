@@ -1,0 +1,194 @@
+.signup {
+  form {
+    display: block;
+    width: 100%;
+  }
+
+  label {
+    border-radius: 3px 0px 0px 3px;
+    display: block;
+    float: left;
+    border: solid 1px $color-light;
+    margin-right: -1px;
+    position: relative;
+    z-index: 1;
+
+    @include transition(border-color .3s ease);
+
+    .signup & {
+      border-right: none;
+      border-radius: 3px 0px 0px 3px;
+    }
+
+    &:hover {
+      border-color: $color-medium;
+    }
+
+    span,
+    input {
+      border: none;
+      float: left;
+      display: inline-block;
+      height: 48px;
+      line-height: 48px;
+    }
+
+    input {
+      padding: 0;
+      @include transition(color .3s ease);
+    }
+
+    span {
+      font-family: "Open Sans Semibold", "Helvetica Neue", Helvetica, Arial, Sans-serif;
+      padding: 0 20px;
+    }
+
+    &.has-focus {
+      border-color: $color-primary;
+
+      input {
+        color: $color-primary;
+      }
+    }
+  }
+
+  input[type=text],
+  input[type=email],
+  select {
+    background-color: transparent;
+    display: inline-block;
+    color: $color-medium;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    @include transition(border-color $fast linear, box-shadow $fast linear);
+
+    &:hover {
+      border-color: $color-medium;
+    }
+
+    &:focus {
+      border-color: $color-dark;
+    }
+  }
+  input,
+  select {
+    font-size: 17px;
+    pointer-events: auto;
+  }
+
+  .select-container {
+    position: relative;
+    pointer-events: none;
+
+    select {
+      height: 60px;
+      line-height: 60px;
+      color: $color-dark;
+      cursor: pointer;
+      border: 0;
+      padding: 0 40px 0 30px;
+    }
+
+    &:after {
+      content: "";
+      display: block;
+      width: 0px;
+      height: 0px;
+      font-size: 0px;
+      line-height: 0px;
+      border-top: solid 5px $color-dark;
+      border-left: solid 3px transparent;
+      border-right: solid 3px transparent;
+      position: absolute;
+      right: 27px;
+      top: 50%;
+      @include transform(translateY(.5px));
+      margin-top: -3px;
+    }
+  }
+}
+
+.bar {
+  select {
+    font-family: "bt_mono_medium", monospace;
+    font-size: 15px;
+    margin-top: -3px;
+  }
+
+  label {
+    display: block;
+    width: 100%;
+    border-top: solid 1px #e0e0e0;
+    border-bottom: solid 1px #e0e0e0;
+    position: relative;
+    margin-bottom: -1px;
+    z-index: 1;
+  }
+
+  .label,
+  .input:after {
+    font-family: "bt_mono_bold", monospace;
+    color: #666869;
+    position: absolute;
+    left: 15px;
+    font-size: 13px;
+    z-index: 3;
+  }
+
+  .input  {
+    padding: 33px 20px 13px 12px;
+    font-size: 16px;
+    height: 67px;
+    border-left: solid 3px transparent;
+    @include transition(border-color .2s ease, background-color .2s ease);
+    position: relative;
+
+    &:after,
+    &:before {
+      content: "";
+      position: absolute;
+      right: 15px;
+      left: auto;
+      color: #ed574a;
+      opacity: 0;
+      @include transform(translateY(10px));
+      @include transition(transform .2s cubic-bezier(0.165, 0.84, 0.44, 1), opacity .2s ease);
+    }
+
+    &:before {
+      background: url(../images/icons/icon-check-green.svg) left top no-repeat transparent;
+      display: block;
+      width: 12px;
+      height: 9px;
+      top: 17px;
+    }
+
+    &:after {
+      content: 'required';
+    }
+
+    &.braintree-hosted-fields-invalid:after,
+    &.braintree-hosted-fields-valid:before {
+      @include transform(translateY(0px));
+      opacity: 1;
+    }
+  }
+
+  .braintree-hosted-fields-invalid {
+    border-left-color: #ed574a;
+  }
+
+  .braintree-hosted-fields-focused {
+    background-color: #FAFDFF;
+    border-left-color: #2CA1E9;
+  }
+}
+
+#paypalContainer {
+  margin-bottom: 1.5em;
+}
+
+.paypal-button-tag-content {
+  display: none;
+}

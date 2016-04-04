@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PseudoShop</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="assets/css/global.css">
+    <script src="https://js.braintreegateway.com/js/braintree-2.21.0.min.js"></script>
+  </head>
+  <body class="signup">
+    <div class="notice notice-payment">
+      <div class="container">
+        <p>You were just paid $15! Complete the setup to collect your funds.</p>
+      </div>
+    </div>
+
+    <header>
+      <div class="container">
+        <div class="company">Pseudo<span>Shop</span></div>
+        <p class="right">Demo Merchant</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <aside>
+        <h2>Hi, let's add a payment provider</h2>
+        <p>Payments are already enabled. Complete the setup to collect any incoming funds.</p>
+      </aside>
+
+      <section>
+        <div class="paypal-braintree">
+          <img class="paypal-logo" src ="/assets/images/braintree_paypal.svg" alt="Braintree Connect" />
+
+          <ul>
+            <li class="visa">Visa</li>
+            <li class="mastercard">Mastercard</li>
+            <li class="amex">American Express</li>
+            <li class="discover">Discover</li>
+            <li class="paypal">PayPal</li>
+          </ul>
+
+          <p>You're already accepting credit/debit cards and PayPal. Connect with Braintree to complete the setup.
+          </p>
+          <p>
+            <a target="_blank" href="https://www.braintreepayments.com/partners/learn-more">Learn more</a>
+          </p>
+
+          <a class="braintree-button" href="<%= @connect_url %>">
+            <img src ="/assets/images/bt_connect_btn.png" height="44" alt="Braintree Connect" />
+          </a>
+        </div>
+      </section>
+
+        <div class="bar">
+          <div class="container">
+            <ul>
+              <% if @client_token %>
+              <li class="pane">
+                <div class="tooltip active test-tooltip">
+                  Unvetted merchants are provisioned an account to accept payments for up to $2,500 or 25 transactions
+                </div>
+
+                <a class="toggle" href="#">
+                  <span class="title">
+                    Test Payment
+                    <span class="detail">$15</span>
+                  </span>
+                </a>
+
+                <section>
+                  <ol class="credentials">
+                    <li>
+                      <h6>PayPal</h6>
+                      <p>Email: bt_seller_us@paypal.com</p>
+                      <p>Password: 11111111</p>
+                    </li>
+                    <li>
+                      <h6>Credit Card</h6>
+                      <p>Number: 4111 1111 1111 1111</p>
+                      <p>Expiration: 11/22</p>
+                    </li>
+                  </ol>
+
+                  <div class="pane-content">
+                    <form id="paymentForm" action='/merchant/<%= @merchant.public_id %>/transactions' method='POST'>
+                      <div class="group" id='paypalContainer'></div>
+                      <input type='hidden' name='transaction[amount]' value='15.00' />
+                      <input type='hidden' id='paymentMethodNonce' name='transaction[paymentMethodNonce]' value='true' />
+
+                      <label for="card-number">
+                        <span class="label">Card Number</span>
+                        <div id="card-number" class="input"></div>
+                      </label>
+
+                      <label for="expiration-date">
+                        <span class="label">Expiration Date</span>
+                        <div id="expiration-date" class="input"></div>
+                      </label>
+
+                      <button class="button primary" type="submit"><span>Pay</span></button>
+                    </form>
+                  </div>
+
+                  <div class="success">
+                    <div class="success-content">
+                      <div class="success-middle">
+                        <span class="icon icon-success"></span>
+                        <h3>Hooray!</h3>
+                        <p>Your test was a success</p>
+                      </div>
+                    </div>
+                  </div>
+
+                </section>
+              </li>
+              <% end %>
+              <li class="braintree">
+                <div class="braintree-partners">Braintree_partners</div>
+              </li>
+            </div>
+          </ul>
+        </div>
+
+      </div>
+
+    <% if @client_token %>
+      <script>
+        var client = braintree.setup('<%= @client_token %>', 'custom', {
+          id: "paymentForm",
+          hostedFields: {
+            onFieldEvent: function (event) {
+              if(event.type === "fieldStateChange" && !event.isValid){
+                console.log("No go! Clear loading state");
+                app.clearPaymentLoading();
+              }
+            },
+            styles: {
+              "input": {
+                "font-family": '"Open Sans Regular", "Helvetica Neue", "Helvetica", "Arial", Sans-serif',
+                "font-size": "16px",
+                "font-weight": "normal",
+                "color": "#3E3C41"
+              },
+              ":focus": {
+                "color": "#2CA1E9"
+              },
+            },
+            number: {
+              selector: "#card-number"
+            },
+            expirationDate: {
+              selector: "#expiration-date"
+            }
+          },
+          onPaymentMethodReceived: function (event) {
+            var form = $('#paymentForm');
+            var url = form.attr('action');
+            document.getElementById('paymentMethodNonce').value = event.nonce;
+            $.ajax({
+              type: "POST",
+              url: url,
+              data: form.serialize(),
+              success: function(response){
+                console.log(response);
+                if (response.success) {
+                  app.showPaymentSuccess();
+                } else {
+                  app.clearPaymentLoading();
+                  alert('transaction failed: ' + response.errors);
+                }
+              },
+              error: function(error){
+                console.log(error);
+              }
+            });
+          },
+          paypal: {
+            container: "paypalContainer",
+            singleUse: true,
+            amount: 15.00,
+            currency: 'USD',
+            enableShippingAddress: true,
+          }
+        });
+      </script>
+    <% end %>
+
+    <script type="text/javascript" src="/assets/javascript/vendor/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="/assets/javascript/global.js"></script>
+  </body>
+</html>

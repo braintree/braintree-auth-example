@@ -1,0 +1,91 @@
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-size: 16px;
+  font-family: "Open Sans Regular", "Helvetica Neue", Helvetica, Arial, Sans-serif;
+  color: $color-dark;
+  line-height: 1.65;
+  text-align: center;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  padding-bottom: 4em;
+}
+
+h1 {
+  font-family: "Open Sans Bold", "Helvetica Neue", Helvetica, Arial, Sans-serif;
+  font-size: 70px;
+  font-weight: normal;
+  letter-spacing: -1px;
+  line-height: 1.13;
+  margin: 37px 0 0 -2px;
+
+  span {
+    display: block;
+  }
+}
+h2 {
+  font-size: 42px;
+  font-family: "Open Sans Semibold", "Helvetica Neue", Helvetica, Arial, Sans-serif;
+  font-weight: normal;
+  margin: 0;
+  line-height: normal;
+}
+.success h3 {
+  font-family: 'bt_mono', monospace;
+  margin: 0;
+  font-size: 38px;
+}
+
+h6 {
+  font-family: 'bt_mono_bold', monospace;
+  font-size: 13px;
+  font-weight: normal;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+/* links */
+a,
+a:link,
+a:visited {
+  color: $color-primary;
+}
+
+/* lists */
+ul {
+  list-style: none;
+  padding: 0;
+}
+dl {
+  @include clearfix;
+  display: block;
+  width: 100%;
+  margin: 0;
+}
+dt {
+  float: left;
+  clear: left;
+  width: 20%;
+}
+dd {
+  float: left;
+  width: 80%;
+  margin: 0;
+}
+
+pre {
+  margin: 0;
+}

@@ -1,0 +1,92 @@
+.tooltip {
+  display: none;
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  margin: 0 0 15px -210px;
+  width: 420px;
+  background-color: #fff;
+  border: solid 1px $color-lighter;
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+  opacity: 1;
+  border-radius: 3px;
+  @include transition(opacity .4s linear);
+
+  &.test-tooltip {
+    margin-left: -45px;
+  }
+
+  &.active {
+    display: block;
+    @include animation(floating 2s cubic-bezier(0.645, 0.045, 0.355, 1));
+    @include animation-iteration-count(infinite);
+  }
+
+  &:hover {
+    @include animation-play-state(paused);
+
+    &:after {
+      @include animation-play-state(paused);
+    }
+  }
+
+  .open & {
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  &:after,
+  &:before {
+    position: absolute;
+    left: 50%;
+    top: 100%; 
+    content: '';
+    display: block;
+    width: 0px;
+    margin-left: -8px;
+    height: 0px;
+    font-size: 0px;
+    line-height: 0px; 
+    border-top: solid 10px #fff;
+    border-right: solid 8px transparent;
+    border-left: solid 8px transparent;
+    z-index: 2;
+  }
+
+  &:after {
+    border-top-color: $color-lighter;
+    margin-top: 1px;
+    z-index: 1;
+    @include animation(fade 2s cubic-bezier(0.645, 0.045, 0.355, 1));
+    @include animation-iteration-count(infinite);
+  }
+}
+
+@include keyframes(floating) {
+  0% {
+    @include transform(translateY(0px));
+    border-color: darken($color-lighter, 30%);
+  }
+  50% {
+    @include transform(translateY(-10px));
+    border-color: $color-lighter;
+  }
+  100% {
+    @include transform(translateY(0px));
+    border-color: darken($color-lighter, 30%);
+  }
+}
+
+@include keyframes(fade) {
+  0% {
+    border-top-color: darken($color-lighter, 30%);
+  }
+  50% {
+    border-top-color: $color-lighter;
+  }
+  100% {
+    border-top-color: darken($color-lighter, 30%);
+  }
+}
