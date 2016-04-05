@@ -21,3 +21,4 @@ gem "braintree", "2.54.0"
 
 gem "unicorn", "4.9.0"
 gem "remote_syslog_logger", "1.0.3"
+gem "dotenv", "2.1.1"
