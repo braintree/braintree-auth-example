@@ -1,190 +1,203 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>PseudoShop</title>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="assets/css/global.css">
-    <script src="https://js.braintreegateway.com/js/braintree-2.21.0.min.js"></script>
-  </head>
-  <body class="signup">
-    <div class="notice notice-payment">
-      <div class="container">
-        <p>You were just paid $15! Complete the setup to collect your funds.</p>
-      </div>
-    </div>
-
-    <header>
-      <div class="container">
-        <div class="company">Pseudo<span>Shop</span></div>
-        <p class="right">Demo Merchant</p>
-      </div>
-    </header>
-
+<% if @merchant.braintree_access_token.present? %>
+  <div class="notice notice-complete show">
     <div class="container">
-      <aside>
-        <h2>Hi, let's add a payment provider</h2>
-        <p>Payments are already enabled. Complete the setup to collect any incoming funds.</p>
-      </aside>
+      <p>You've successfully connected a Braintree account to PseudoShop!</p>
+    </div>
+  </div>
 
-      <section>
-        <div class="paypal-braintree">
-          <img class="paypal-logo" src ="/assets/images/braintree_paypal.svg" alt="Braintree Connect" />
+  <div class="notice notice-payment">
+    <div class="container">
+      <p>Demo Merchant was just paid $15!</p>
+    </div>
+  </div>
+<% end %>
 
-          <ul>
-            <li class="visa">Visa</li>
-            <li class="mastercard">Mastercard</li>
-            <li class="amex">American Express</li>
-            <li class="discover">Discover</li>
-            <li class="paypal">PayPal</li>
-          </ul>
+<header>
+  <div class="container">
+    <a href="/">
+      <div class="company">Pseudo<span>Shop</span></div>
+    </a>
+    <p class="right">Demo Merchant</p>
+  </div>
+</header>
 
-          <p>You're already accepting credit/debit cards and PayPal. Connect with Braintree to complete the setup.
-          </p>
-          <p>
-            <a target="_blank" href="https://www.braintreepayments.com/partners/learn-more">Learn more</a>
-          </p>
+<div class="container">
+  <% unless @merchant.braintree_access_token.present? %>
+    <aside>
+      <h2>Hi, let's add a payment provider</h2>
+      <p>By clicking the Connect with Braintree button, your users will be able to set up a Braintree account and authorize you to process transactions on their behalf</p>
+    </aside>
+  <% end %>
 
-          <a class="braintree-button" href="<%= @connect_url %>">
-            <img src ="/assets/images/bt_connect_btn.png" height="44" alt="Braintree Connect" />
-          </a>
-        </div>
-      </section>
+  <section>
+    <div class="paypal-braintree">
+      <img class="paypal-logo" src="/assets/images/braintree_paypal.svg" alt="Braintree Connect" />
 
-        <div class="bar">
-          <div class="container">
-            <ul>
-              <% if @client_token %>
-              <li class="pane">
-                <div class="tooltip active test-tooltip">
-                  Unvetted merchants are provisioned an account to accept payments for up to $2,500 or 25 transactions
-                </div>
+      <ul>
+        <li class="visa">Visa</li>
+        <li class="mastercard">Mastercard</li>
+        <li class="amex">American Express</li>
+        <li class="discover">Discover</li>
+        <li class="paypal">PayPal</li>
+      </ul>
 
-                <a class="toggle" href="#">
-                  <span class="title">
-                    Test Payment
-                    <span class="detail">$15</span>
-                  </span>
-                </a>
+      <p>
+        <a target="_blank" href="https://www.braintreepayments.com/partners/learn-more">Learn more</a>
+      </p>
 
-                <section>
-                  <ol class="credentials">
-                    <li>
-                      <h6>PayPal</h6>
-                      <p>Email: bt_seller_us@paypal.com</p>
-                      <p>Password: 11111111</p>
-                    </li>
-                    <li>
-                      <h6>Credit Card</h6>
-                      <p>Number: 4111 1111 1111 1111</p>
-                      <p>Expiration: 11/22</p>
-                    </li>
-                  </ol>
+      <% if @merchant.braintree_access_token.present? %>
+        <p>
+          This user has connected a Braintree account to PseudoShop! Click "Test Payment" below to run a transaction on their behalf.
+        </p>
+      <% else %>
+        <p>Connect with Braintree to start accepting credit/debit cards and PayPal instantly.</p>
 
-                  <div class="pane-content">
-                    <form id="paymentForm" action='/merchant/<%= @merchant.public_id %>/transactions' method='POST'>
-                      <div class="group" id='paypalContainer'></div>
-                      <input type='hidden' name='transaction[amount]' value='15.00' />
-                      <input type='hidden' id='paymentMethodNonce' name='transaction[paymentMethodNonce]' value='true' />
+        <div id="bt-oauth-connect-container"></div>
+        <script>
+          new BraintreeOAuthConnect({
+            connectUrl: '<%= @connect_url %>',
+            container: 'bt-oauth-connect-container',
+            environment: 'sandbox',
+            onError: function (errorObject) {
+              console.warn(errorObject.message);
+            }
+          });
+        </script>
+      <% end %>
+    </div>
+  </section>
 
-                      <label for="card-number">
-                        <span class="label">Card Number</span>
-                        <div id="card-number" class="input"></div>
-                      </label>
+  <div class="bar">
+    <div class="container">
+      <ul>
+        <% if @client_token %>
+          <li class="pane">
 
-                      <label for="expiration-date">
-                        <span class="label">Expiration Date</span>
-                        <div id="expiration-date" class="input"></div>
-                      </label>
-
-                      <button class="button primary" type="submit"><span>Pay</span></button>
-                    </form>
-                  </div>
-
-                  <div class="success">
-                    <div class="success-content">
-                      <div class="success-middle">
-                        <span class="icon icon-success"></span>
-                        <h3>Hooray!</h3>
-                        <p>Your test was a success</p>
-                      </div>
-                    </div>
-                  </div>
-
-                </section>
-              </li>
-              <% end %>
-              <li class="braintree">
-                <div class="braintree-partners">Braintree_partners</div>
-              </li>
+            <div class="tooltip active test-tooltip">
+              Now that your user has connected a Braintree account, you can run transactions on their behalf using the access token provided.  Try it now!
             </div>
-          </ul>
-        </div>
 
-      </div>
+            <a class="toggle" href="#">
+              <span class="title">
+                Test Payment
+                <span class="detail">$15</span>
+              </span>
+            </a>
 
-    <% if @client_token %>
-      <script>
-        var client = braintree.setup('<%= @client_token %>', 'custom', {
-          id: "paymentForm",
-          hostedFields: {
-            onFieldEvent: function (event) {
-              if(event.type === "fieldStateChange" && !event.isValid){
-                console.log("No go! Clear loading state");
-                app.clearPaymentLoading();
-              }
-            },
-            styles: {
-              "input": {
-                "font-family": '"Open Sans Regular", "Helvetica Neue", "Helvetica", "Arial", Sans-serif',
-                "font-size": "16px",
-                "font-weight": "normal",
-                "color": "#3E3C41"
-              },
-              ":focus": {
-                "color": "#2CA1E9"
-              },
-            },
-            number: {
-              selector: "#card-number"
-            },
-            expirationDate: {
-              selector: "#expiration-date"
+            <section>
+              <ol class="credentials">
+                <li>
+                  <h6>PayPal</h6>
+                  <p>Email: bt_seller_us@paypal.com</p>
+                  <p>Password: 11111111</p>
+                </li>
+                <li>
+                  <h6>Credit Card</h6>
+                  <p>Number: 4111 1111 1111 1111</p>
+                  <p>Expiration: 11/22</p>
+                </li>
+              </ol>
+
+              <div class="pane-content">
+                <form id="paymentForm" action='/merchant/<%= @merchant.public_id %>/transactions' method='POST'>
+                  <div class="group" id='paypalContainer'></div>
+                  <input type='hidden' name='transaction[amount]' value='15.00' />
+                  <input type='hidden' id='paymentMethodNonce' name='transaction[paymentMethodNonce]' value='true' />
+
+                  <label for="card-number">
+                    <span class="label">Card Number</span>
+                    <div id="card-number" class="input"></div>
+                  </label>
+
+                  <label for="expiration-date">
+                    <span class="label">Expiration Date</span>
+                    <div id="expiration-date" class="input"></div>
+                  </label>
+
+                  <button class="button primary" type="submit"><span>Pay</span></button>
+                </form>
+              </div>
+
+              <div class="success">
+                <div class="success-content">
+                  <div class="success-middle">
+                    <span class="icon icon-success"></span>
+                    <h3>Hooray!</h3>
+                    <p>Your test was a success</p>
+                  </div>
+                </div>
+              </div>
+
+            </section>
+          </li>
+        <% end %>
+
+        <li class="braintree">
+          <div class="braintree-partners">Braintree_partners</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<% if @client_token %>
+  <script>
+    var client = braintree.setup('<%= @client_token %>', 'custom', {
+      id: "paymentForm",
+      hostedFields: {
+        onFieldEvent: function (event) {
+          if(event.type === "fieldStateChange" && !event.isValid){
+            console.log("No go! Clear loading state");
+            app.clearPaymentLoading();
+          }
+        },
+        styles: {
+          "input": {
+            "font-family": '"Open Sans Regular", "Helvetica Neue", "Helvetica", "Arial", Sans-serif',
+            "font-size": "16px",
+            "font-weight": "normal",
+            "color": "#3E3C41"
+          },
+          ":focus": {
+            "color": "#2CA1E9"
+          },
+        },
+        number: {
+          selector: "#card-number"
+        },
+        expirationDate: {
+          selector: "#expiration-date"
+        }
+      },
+      onPaymentMethodReceived: function (event) {
+        var form = $('#paymentForm');
+        var url = form.attr('action');
+        document.getElementById('paymentMethodNonce').value = event.nonce;
+        $.ajax({
+          type: "POST",
+          url: url,
+          data: form.serialize(),
+          success: function(response){
+            console.log(response);
+            if (response.success) {
+              app.showPaymentSuccess();
+            } else {
+              app.clearPaymentLoading();
+              alert('transaction failed: ' + response.errors);
             }
           },
-          onPaymentMethodReceived: function (event) {
-            var form = $('#paymentForm');
-            var url = form.attr('action');
-            document.getElementById('paymentMethodNonce').value = event.nonce;
-            $.ajax({
-              type: "POST",
-              url: url,
-              data: form.serialize(),
-              success: function(response){
-                console.log(response);
-                if (response.success) {
-                  app.showPaymentSuccess();
-                } else {
-                  app.clearPaymentLoading();
-                  alert('transaction failed: ' + response.errors);
-                }
-              },
-              error: function(error){
-                console.log(error);
-              }
-            });
-          },
-          paypal: {
-            container: "paypalContainer",
-            singleUse: true,
-            amount: 15.00,
-            currency: 'USD',
-            enableShippingAddress: true,
+          error: function(error){
+            console.log(error);
           }
         });
-      </script>
-    <% end %>
-
-    <script type="text/javascript" src="/assets/javascript/vendor/jquery-2.1.4.min.js"></script>
-    <script type="text/javascript" src="/assets/javascript/global.js"></script>
-  </body>
-</html>
+      },
+      paypal: {
+        container: "paypalContainer",
+        singleUse: true,
+        amount: 15.00,
+        currency: 'USD',
+        enableShippingAddress: true,
+      }
+    });
+  </script>
+<% end %>

@@ -33,9 +33,11 @@ end
 get '/merchant/:public_id' do |public_id|
   @merchant = Merchant.find_by(:public_id => public_id)
 
-  gateway = _oauth_gateway
+  if @merchant.braintree_access_token.present?
+    @client_token = _merchant_gateway(@merchant).client_token.generate
+  else
+    gateway = _oauth_gateway
 
-  unless @merchant.braintree_id.present?
     @merchant.update_attributes!(:state => SecureRandom.hex(10))
     @connect_url = gateway.oauth.connect_url(
       :redirect_uri => ENV['REDIRECT_URI'],
@@ -76,8 +78,6 @@ get '/merchant/:public_id' do |public_id|
     )
   end
 
-  @client_token = _merchant_gateway(@merchant).client_token.generate if @merchant.braintree_access_token.present?
-
   erb :merchant
 end
 
@@ -116,10 +116,9 @@ get '/callback' do
     merchant.update_attributes(
       :braintree_access_token => result.credentials.access_token,
       :braintree_refresh_token => result.credentials.refresh_token,
-      :braintree_id => params[:merchant_id],
+      :braintree_id => params[:merchantId],
     )
   end
-
 
   redirect to("/merchant/#{merchant.public_id}")
 end
