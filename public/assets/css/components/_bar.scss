@@ -236,10 +236,12 @@ $bar-height: 54px;
   }
 }
 
-.braintree-partners {
+.braintree-auth {
   float: left;
-  background: url(../images/braintree_partners.svg) center center no-repeat transparent;
-  width: 220px;
+  background: url(../images/braintree_auth.svg) center center no-repeat transparent;
+  background-size: 128px 14px;
+  overflow: hidden;
+  width: 200px;
   height: 100%;
   text-indent: -999em;
 }
