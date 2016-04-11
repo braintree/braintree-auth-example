@@ -96,6 +96,15 @@ aside {
   }
 }
 
+table {
+  border: 1px solid $color-lighter;
+}
+
+td, th {
+  padding: 10px;
+  border-bottom: 1px solid $color-lighter;
+}
+
 /* Connected */
 .tokens {
 

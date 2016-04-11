@@ -35,12 +35,16 @@ get '/merchant/:public_id' do |public_id|
 
   if @merchant.braintree_access_token.present?
     @client_token = _merchant_gateway(@merchant).client_token.generate
+
+    @transactions = _merchant_gateway(@merchant).transaction.search do |search|
+      search.created_at >= Time.now - 60*60*24
+    end
   else
     gateway = _oauth_gateway
 
     @merchant.update_attributes!(:state => SecureRandom.hex(10))
     @connect_url = gateway.oauth.connect_url(
-      :redirect_uri => ENV['REDIRECT_URI'],
+      :redirect_uri => ENV["REDIRECT_URI"],
       :scope => "read_write",
       :state => @merchant.state,
       :user => {
@@ -96,7 +100,7 @@ post '/merchant/:public_id/transactions' do |public_id|
   content_type :json
   {
     :success => result.success?,
-    :errors => result.success? ? nil : result.errors.inspect,
+    :errors => result.success? ? nil : result.errors,
   }.to_json
 end
 

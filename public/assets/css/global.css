@@ -1302,6 +1302,13 @@ aside {
   .braintree-button img {
     float: left; }
 
+table {
+  border: 1px solid #CAC6CE; }
+
+td, th {
+  padding: 10px;
+  border-bottom: 1px solid #CAC6CE; }
+
 /* Connected */
 
 /*# sourceMappingURL=global.css.map */

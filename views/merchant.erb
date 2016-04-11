@@ -49,6 +49,31 @@
         <p>
           This user has connected a Braintree account to PseudoShop! Click "Test Payment" below to run a transaction on their behalf.
         </p>
+
+        <h3>Today's Transactions:</h3>
+        <% if @transactions.empty? %>
+          <p>No transactions to show! Trying running one below to see how to view a merchant's transactions.</p>
+        <% else %>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Transaction ID</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <% @transactions.each do |transaction| %>
+              <tr>
+                <td>
+                  <a href="https://sandbox.braintreegateway.com/merchants/<%= @merchant.braintree_id %>/transactions/<%= transaction.id %>"><%= transaction.id %></a>
+                </td>
+                <td><%= "$%05.2f" % transaction.amount %></td>
+                <td><%= transaction.status.titleize %></td>
+              </tr>
+            <% end %>
+          </table>
+        <% end %>
+
       <% else %>
         <p>Connect with Braintree to start accepting credit/debit cards and PayPal instantly.</p>
 
