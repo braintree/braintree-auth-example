@@ -47,6 +47,7 @@ get '/merchant/:public_id' do |public_id|
       :redirect_uri => ENV["REDIRECT_URI"],
       :scope => "read_write",
       :state => @merchant.state,
+      :landing_page => "signup",
       :user => {
         :first_name => "Bob",
         :last_name => "Merchant",
