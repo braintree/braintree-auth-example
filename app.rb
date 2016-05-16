@@ -11,6 +11,13 @@ set :database, ENV['DATABASE_URL'] || {:adapter => "sqlite3", :database => "db/d
 
 Dir[File.dirname(__FILE__) + "/models/*.rb"].each { |file| require file }
 
+# Allows you to set global credentials to restrict access to a public application
+if ENV['PASSWORD']
+  use Rack::Auth::Basic, "Restricted Area" do |username, password|
+    username == ENV["USERNAME"] && password == ENV["PASSWORD"]
+  end
+end
+
 get '/' do
   @slug = rand(10000)
   erb :index
