@@ -25,12 +25,14 @@ end
 
 post "/merchants" do
   email = params[:email]
+  country_code = params[:country_code]
 
   @merchant = Merchant.where(:email => email).first
   if @merchant.nil?
     @merchant = Merchant.create({
       :email => email,
       :public_id => SecureRandom.uuid,
+      :country_code => country_code,
     })
   end
 
@@ -51,42 +53,12 @@ get '/merchant/:public_id' do |public_id|
 
     @merchant.update_attributes!(:state => SecureRandom.hex(10))
     @connect_url = gateway.oauth.connect_url(
-      :redirect_uri => ENV["REDIRECT_URI"],
-      :scope => "read_write",
-      :state => @merchant.state,
-      :landing_page => "signup",
-      :user => {
-        :first_name => "Bob",
-        :last_name => "Merchant",
-        :phone => "312-555-5555",
-        :dob_day => "01",
-        :dob_month => "01",
-        :dob_year => "1970",
-        :street_address => "222 W Merchandise Mart Plaza",
-        :locality => "Chicago",
-        :region => "IL",
-        :postal_code => "60654",
-        :country => "USA",
-      },
-      :business => {
-        :name => "Example CO",
-        :registered_as => "limited_liability_corporation",
-        :industry => "software",
-        :phone => "312-555-5555",
-        :website => "https://example.com",
-        :description => "send money",
-        :currency => "USD",
-        :annual_volume_amount => "50,000",
-        :average_transaction_amount => "10",
-        :maximum_transaction_amount => "100",
-        :ship_physical_goods => false,
-        :street_address => "222 W Merchandise Mart Plaza",
-        :locality => "Chicago",
-        :region => "IL",
-        :postal_code => "60654",
-        :country => "USA",
-      },
-      :payment_methods => ["credit_card", "paypal"],
+      {
+        :redirect_uri => ENV["REDIRECT_URI"],
+        :scope => "read_write",
+        :state => @merchant.state,
+        :landing_page => "signup",
+      }.merge(PrefillData.user_and_business(@merchant.country_code))
     )
   end
 
@@ -134,6 +106,7 @@ get '/callback' do
 
   redirect to("/merchant/#{merchant.public_id}")
 end
+
 
 def _merchant_gateway(merchant)
   Braintree::Gateway.new({
