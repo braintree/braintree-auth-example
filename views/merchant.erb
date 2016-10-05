@@ -72,7 +72,7 @@
             <% @transactions.each do |transaction| %>
               <tr>
                 <td>
-                  <a href="https://sandbox.braintreegateway.com/merchants/<%= @merchant.braintree_id %>/transactions/<%= transaction.id %>"><%= transaction.id %></a>
+                  <a href="https://<%= settings.gateway_host %>/merchants/<%= @merchant.braintree_id %>/transactions/<%= transaction.id %>"><%= transaction.id %></a>
                 </td>
                 <td><%= "$%05.2f" % transaction.amount %></td>
                 <td><%= transaction.status.titleize %></td>
@@ -89,7 +89,7 @@
           new BraintreeOAuthConnect({
             connectUrl: '<%= @connect_url %>',
             container: 'bt-oauth-connect-container',
-            environment: 'sandbox',
+            environment: '<%= settings.gateway_environment %>',
             onError: function (errorObject) {
               console.warn(errorObject.message);
             }

@@ -8,6 +8,8 @@ require 'dotenv'
 Dotenv.load
 
 set :database, ENV['DATABASE_URL'] || {:adapter => "sqlite3", :database => "db/development.sqlite3"}
+set :gateway_environment, ENV['GATEWAY_ENVIRONMENT'] || "sandbox"
+set :gateway_host, ENV['GATEWAY_HOST'] || "sandbox.braintreegateway.com"
 
 Dir[File.dirname(__FILE__) + "/models/*.rb"].each { |file| require file }
 
@@ -124,7 +126,7 @@ end
 def _merchant_gateway(merchant)
   Braintree::Gateway.new({
     :access_token => merchant.braintree_access_token,
-    :environment => "sandbox",
+    :environment => settings.gateway_environment,
   })
 end
 
@@ -132,6 +134,6 @@ def _oauth_gateway
   Braintree::Gateway.new({
     :client_id => ENV["CLIENT_ID"],
     :client_secret => ENV["CLIENT_SECRET"],
-    :environment => "sandbox",
+    :environment => settings.gateway_environment,
   })
 end
