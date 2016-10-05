@@ -50,6 +50,13 @@
           This user has connected a Braintree account to PseudoShop! Click "Test Payment" below to run a transaction on their behalf.
         </p>
 
+        <% if @three_d_secure_enabled %>
+          <p>
+            3D Secure is <strong>enabled</strong> for this merchant.
+            <label><input type="checkbox" id="require3DS" checked="checked">&nbsp;Require 3DS</label>
+          </p>
+        <% end %>
+
         <h3>Today's Transactions:</h3>
         <% if @transactions.empty? %>
           <p>No transactions to show! Trying running one below to see how to view a merchant's transactions.</p>
@@ -128,6 +135,7 @@
                   <div class="group" id='paypalContainer'></div>
                   <input type='hidden' name='transaction[amount]' value='15.00' />
                   <input type='hidden' id='paymentMethodNonce' name='transaction[paymentMethodNonce]' value='true' />
+                  <input type='hidden' id='optionsRequire3DS' name='require3DS' value='true' />
 
                   <label for="card-number">
                     <span class="label">Card Number</span>
@@ -153,6 +161,15 @@
                 </div>
               </div>
 
+              <div class="error">
+                <div class="error-content">
+                  <div class="error-middle">
+                    <h3>Oh no!</h3>
+                    <p class="message"></p>
+                  </div>
+                </div>
+              </div>
+
             </section>
           </li>
         <% end %>
@@ -167,11 +184,12 @@
 
 <% if @client_token %>
   <script>
-    var client = braintree.setup('<%= @client_token %>', 'custom', {
+    var isThreeDSEnabledMerchant = <%= @three_d_secure_enabled %>;
+    braintree.setup('<%= @client_token %>', 'custom', {
       id: "paymentForm",
       hostedFields: {
         onFieldEvent: function (event) {
-          if(event.type === "fieldStateChange" && !event.isValid){
+          if(event.type === "fieldStateChange" && !event.isValid) {
             console.log("No go! Clear loading state");
             app.clearPaymentLoading();
           }
@@ -197,24 +215,11 @@
       onPaymentMethodReceived: function (event) {
         var form = $('#paymentForm');
         var url = form.attr('action');
-        document.getElementById('paymentMethodNonce').value = event.nonce;
-        $.ajax({
-          type: "POST",
-          url: url,
-          data: form.serialize(),
-          success: function(response){
-            console.log(response);
-            if (response.success) {
-              app.showPaymentSuccess();
-            } else {
-              app.clearPaymentLoading();
-              alert('transaction failed: ' + response.errors);
-            }
-          },
-          error: function(error){
-            console.log(error);
-          }
-        });
+        if (isThreeDSEnabledMerchant) {
+          threeDSFlow(form, url, event.nonce)
+        } else {
+          submitTransaction(form, url, event.nonce);
+        }
       },
       paypal: {
         container: "paypalContainer",
@@ -224,5 +229,75 @@
         enableShippingAddress: true,
       }
     });
+
+    function submitTransaction(form, url, nonce) {
+      document.getElementById('paymentMethodNonce').value = nonce;
+      document.getElementById('optionsRequire3DS').value = $('#require3DS').is(':checked');
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: form.serialize(),
+        success: function(response){
+          if (response.success) {
+            app.showPaymentSuccess();
+          } else {
+            console.log(response);
+            app.clearPaymentLoading();
+            alert('transaction failed: ' + response.errors);
+          }
+        },
+        error: function(error){
+          console.log(error);
+        }
+      });
+    }
+
+    function threeDSFlow(form, url, nonce) {
+      var threeDSClient = new braintree.api.Client({
+        authorization: '<%= @client_token %>'
+      });
+
+      threeDSClient.verify3DS({
+        amount: 15.00,
+        creditCard: nonce,
+        onUserClose: function() {
+          app.clearPaymentLoading();
+        }
+      }, function (error, response) {
+        if (error) {
+          alert('verify3DS failed: ' + error.message);
+          return;
+        }
+
+        var liabilityShifted = response.verificationDetails.liabilityShifted;
+        var liabilityShiftPossible =  response.verificationDetails.liabilityShiftPossible;
+        var require3DS = $('#require3DS').is(':checked');
+
+        if (liabilityShifted) {
+          submitTransaction(form, url, response.nonce);
+          return;
+        }
+
+        if (liabilityShiftPossible) {
+          if (require3DS) {
+            app.showError('3DS is required, but 3DS verification failed');
+            app.clearPaymentLoading();
+          } else {
+            alert('3DS verification failed, but continuing because 3DS is not required');
+            submitTransaction(form, url, response.nonce);
+          }
+          return;
+        }
+
+        if (require3DS) {
+          app.showError('3DS is required, but the provided card is not eligible for 3DS');
+          app.clearPaymentLoading();
+        } else {
+          alert('The provided card is not eligible for 3DS, but continuing because 3DS is not required');
+          submitTransaction(form, url, response.nonce);
+        }
+      });
+    }
+
   </script>
 <% end %>

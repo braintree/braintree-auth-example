@@ -112,6 +112,55 @@ $bar-height: 54px;
     margin-top: -60px;
   }
 
+  .error {
+    position: absolute;
+    background-color: #fff;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 100%;
+    z-index: 2;
+    text-align: center;
+    opacity: 0;
+    @include transition(opacity .4s ease-in-out);
+
+    h3,
+    p,
+    .icon {
+      opacity: 0;
+      @include transform(translateY(100px));
+      @include transition(transform .4s cubic-bezier(0.165, 0.84, 0.44, 1), opacity .4s ease);
+    }
+    
+    &.show {
+      opacity: 1;
+      top: 0%;
+
+      h3, 
+      p,
+      .icon {
+        opacity: 1;
+        @include transform(translateY(0px));
+      }
+
+      h3 {
+        @include transition-delay(.1s);
+      }
+      
+      p {
+        @include transition-delay(.2s);
+      }
+    }
+  }
+  
+  .error-content {
+    @extend .middle-wrapper;
+  }
+
+  .error-middle {
+    @extend .middle;
+  }
+
   a.toggle {
     @include transition(background-color .4s linear, color .4s linear, width .2s cubic-bezier(0.77, 0, 0.175, 1), opacity .2s ease);
     font-family: 'bt_mono_medium', monospace;

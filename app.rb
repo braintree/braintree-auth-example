@@ -44,6 +44,7 @@ get '/merchant/:public_id' do |public_id|
 
   if @merchant.braintree_access_token.present?
     @client_token = _merchant_gateway(@merchant).client_token.generate
+    @three_d_secure_enabled = JSON.parse(@client_token)["threeDSecureEnabled"]
 
     @transactions = _merchant_gateway(@merchant).transaction.search do |search|
       search.created_at >= Time.now - 60*60*24
@@ -74,7 +75,7 @@ post '/merchant/:public_id/transactions' do |public_id|
     :payment_method_nonce => params["transaction"]["paymentMethodNonce"],
     :options => {
       :submit_for_settlement => true,
-    },
+    }.merge(three_d_secure_options(params)),
   )
 
   content_type :json
@@ -105,6 +106,18 @@ get '/callback' do
   end
 
   redirect to("/merchant/#{merchant.public_id}")
+end
+
+def three_d_secure_options(transaction_params)
+  if params["require3DS"]
+    {
+      :three_d_secure => {
+        :required => true,
+      },
+    }
+  else
+    {}
+  end
 end
 
 
