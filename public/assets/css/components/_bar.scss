@@ -12,7 +12,7 @@ $bar-height: 54px;
   .container {
     height: 100%;
   }
-  
+
   ul,
   ul > li {
     display: inline-block;
@@ -20,7 +20,7 @@ $bar-height: 54px;
     float: left;
   }
 
-  ul { 
+  ul {
     float: right;
     margin: 0;
 
@@ -36,7 +36,7 @@ $bar-height: 54px;
     text-align: center;
     margin-top: 1.5em;
 
-    &:hover, 
+    &:hover,
     &:focus {
       background-color: darken(#2CA1E9, 8%);
     }
@@ -49,7 +49,7 @@ $bar-height: 54px;
   position: relative;
 
   @include transition(transform .4s cubic-bezier(0.645, 0.045, 0.355, 1), box-shadow .4s linear);
-  
+
   section {
     clear: both;
     position: relative;
@@ -74,12 +74,12 @@ $bar-height: 54px;
       @include transform(translateY(100px));
       @include transition(transform .4s cubic-bezier(0.165, 0.84, 0.44, 1), opacity .4s ease);
     }
-    
+
     &.show {
       opacity: 1;
       top: 0%;
 
-      h3, 
+      h3,
       p,
       .icon {
         opacity: 1;
@@ -89,13 +89,13 @@ $bar-height: 54px;
       h3 {
         @include transition-delay(.1s);
       }
-      
+
       p {
         @include transition-delay(.2s);
       }
     }
   }
-  
+
   .success-content {
     @extend .middle-wrapper;
   }
@@ -112,6 +112,55 @@ $bar-height: 54px;
     margin-top: -60px;
   }
 
+  .error {
+    position: absolute;
+    background-color: #fff;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 100%;
+    z-index: 2;
+    text-align: center;
+    opacity: 0;
+    @include transition(opacity .4s ease-in-out);
+
+    h3,
+    p,
+    .icon {
+      opacity: 0;
+      @include transform(translateY(100px));
+      @include transition(transform .4s cubic-bezier(0.165, 0.84, 0.44, 1), opacity .4s ease);
+    }
+
+    &.show {
+      opacity: 1;
+      top: 0%;
+
+      h3,
+      p,
+      .icon {
+        opacity: 1;
+        @include transform(translateY(0px));
+      }
+
+      h3 {
+        @include transition-delay(.1s);
+      }
+
+      p {
+        @include transition-delay(.2s);
+      }
+    }
+  }
+
+  .error-content {
+    @extend .middle-wrapper;
+  }
+
+  .error-middle {
+    @extend .middle;
+  }
+
   a.toggle {
     @include transition(background-color .4s linear, color .4s linear, width .2s cubic-bezier(0.77, 0, 0.175, 1), opacity .2s ease);
     font-family: 'bt_mono_medium', monospace;
@@ -121,7 +170,7 @@ $bar-height: 54px;
     display: block;
     float: right;
     width: auto;
-    text-decoration: none; 
+    text-decoration: none;
     height: $bar-height;
     line-height: $bar-height;
     padding: 0 30px;
@@ -162,9 +211,9 @@ $bar-height: 54px;
     top: 0px;
   }
 
-  &.open { 
+  &.open {
     box-shadow: 0px 0px 14px rgba(0,0,0,.14), 0px 0px 3px rgba(0,0,0,.14);
-    
+
     a.toggle {
       background-color: $color-dark;
       color: #fff;
@@ -177,7 +226,7 @@ $bar-height: 54px;
     .detail {
       opacity: .6;
     }
-  } 
+  }
 
   .pane-content {
     background-color: #fff;

@@ -5,6 +5,7 @@ function App(){
   this.$payForm = $('#paymentForm');
   this.$payButton = $('.button.primary');
   this.$paySuccess = $('.success');
+  this.$payError = $('.error');
   this.$noticeEnabled = $('.notice-enabled');
   this.$noticePayment = $('.notice-payment');
 
@@ -84,6 +85,21 @@ App.prototype.showPaymentSuccess = function(){
       self.$noticePayment.addClass(self.showClass);
     }, 600);
   }, 2000);
+};
+
+App.prototype.showError = function(message){
+  var self = this;
+  var pane = $('.pane');
+
+  this.$payError.find('.message').text(message || 'Something went wrong');
+  this.$payError.addClass(this.showClass);
+
+  window.setTimeout(function(){
+    app.closePane(pane, function() {
+      self.$payError.removeClass(self.showClass);
+    });
+    app.clearPaymentLoading();
+  }, 5000);
 };
 
 App.prototype.labelFocus = function(parent){
@@ -167,7 +183,7 @@ App.prototype.openPane = function(pane){
   }, 200);
 };
 
-App.prototype.closePane = function(pane){
+App.prototype.closePane = function(pane, callback){
   var self = this;
   var toggle = pane.find('.toggle');
 
@@ -181,6 +197,9 @@ App.prototype.closePane = function(pane){
 
   window.setTimeout(function(){
     toggle.css({"width": toggle.data("original-width")});
+    if (callback) {
+      callback();
+    }
   }, 400);
 };
 

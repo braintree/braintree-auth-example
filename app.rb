@@ -8,6 +8,8 @@ require 'dotenv'
 Dotenv.load
 
 set :database, ENV['DATABASE_URL'] || {:adapter => "sqlite3", :database => "db/development.sqlite3"}
+set :gateway_environment, ENV['GATEWAY_ENVIRONMENT'] || "sandbox"
+set :gateway_host, ENV['GATEWAY_HOST'] || "sandbox.braintreegateway.com"
 
 Dir[File.dirname(__FILE__) + "/models/*.rb"].each { |file| require file }
 
@@ -44,6 +46,7 @@ get '/merchant/:public_id' do |public_id|
 
   if @merchant.braintree_access_token.present?
     @client_token = _merchant_gateway(@merchant).client_token.generate
+    @three_d_secure_enabled = JSON.parse(@client_token)["threeDSecureEnabled"]
 
     @transactions = _merchant_gateway(@merchant).transaction.search do |search|
       search.created_at >= Time.now - 60*60*24
@@ -74,7 +77,7 @@ post '/merchant/:public_id/transactions' do |public_id|
     :payment_method_nonce => params["transaction"]["paymentMethodNonce"],
     :options => {
       :submit_for_settlement => true,
-    },
+    }.merge(three_d_secure_options(params)),
   )
 
   content_type :json
@@ -107,11 +110,23 @@ get '/callback' do
   redirect to("/merchant/#{merchant.public_id}")
 end
 
+def three_d_secure_options(transaction_params)
+  if params["require3DS"]
+    {
+      :three_d_secure => {
+        :required => true,
+      },
+    }
+  else
+    {}
+  end
+end
+
 
 def _merchant_gateway(merchant)
   Braintree::Gateway.new({
     :access_token => merchant.braintree_access_token,
-    :environment => "sandbox",
+    :environment => settings.gateway_environment,
   })
 end
 
@@ -119,6 +134,6 @@ def _oauth_gateway
   Braintree::Gateway.new({
     :client_id => ENV["CLIENT_ID"],
     :client_secret => ENV["CLIENT_SECRET"],
-    :environment => "sandbox",
+    :environment => settings.gateway_environment,
   })
 end
