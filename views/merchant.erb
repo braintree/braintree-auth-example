@@ -124,7 +124,12 @@
                   <p>Password: 11111111</p>
                 </li>
                 <li>
-                  <h6>Credit Card</h6>
+                  <h6>
+                    Credit Card
+                    <% if @three_d_secure_enabled %>
+                      (<a href="https://developers.braintreepayments.com/guides/3d-secure/testing-go-live/" target="_blank" rel="noopener">3DS testing</a>)
+                    <% end %>
+                  </h6>
                   <p>Number: 4111 1111 1111 1111</p>
                   <p>Expiration: 11/22</p>
                 </li>
