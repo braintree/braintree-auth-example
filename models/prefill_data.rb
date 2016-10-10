@@ -6,6 +6,10 @@ module PrefillData
         {
           :user => {
             :phone => "312-555-5555",
+            :street_address => "222 W Merchandise Mart Plaza",
+            :locality => "Chicago",
+            :region => "IL",
+            :postal_code => "60654",
             :country => "USA",
           },
           :business => {
@@ -24,6 +28,10 @@ module PrefillData
         {
           :user => {
             :phone => "+4403457345345",
+            :street_address => "123 Alderson Road",
+            :postal_code => "NR30 1QG",
+            :locality => "Great Yarmouth",
+            :region => "Norfolk",
             :country => "GBR",
           },
           :business => {
@@ -43,6 +51,7 @@ module PrefillData
   end
 
   def self._template
+    # full reference: https://developers.braintreepayments.com/guides/braintree-auth/reference/ruby#signup-form-fields
     {
       :user => {
         :first_name => "Bob",
@@ -53,10 +62,11 @@ module PrefillData
       },
       :business => {
         :name => "Example CO",
-        :registered_as => "limited_liability_corporation",
+        :registered_as => "sole_proprietorship",
         :industry => "software",
         :website => "https://example.com",
         :description => "send money",
+        :established_on => "2001-05",
         :annual_volume_amount => "50,000",
         :average_transaction_amount => "10",
         :maximum_transaction_amount => "100",
