@@ -8,6 +8,7 @@ require 'dotenv'
 Dotenv.load
 
 set :database, ENV['DATABASE_URL'] || {:adapter => "sqlite3", :database => "db/development.sqlite3"}
+set :bind, '0.0.0.0'
 
 Dir[File.dirname(__FILE__) + "/models/*.rb"].each { |file| require file }
 
