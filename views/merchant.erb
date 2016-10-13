@@ -7,7 +7,7 @@
 
   <div class="notice notice-payment">
     <div class="container">
-      <p>Demo Merchant was just paid $15!</p>
+      <p>Demo Merchant was just paid $1!</p>
     </div>
   </div>
 <% end %>
@@ -105,7 +105,7 @@
             <a class="toggle" href="#">
               <span class="title">
                 Test Payment
-                <span class="detail">$15</span>
+                <span class="detail">$1</span>
               </span>
             </a>
 
@@ -126,7 +126,7 @@
               <div class="pane-content">
                 <form id="paymentForm" action='/merchant/<%= @merchant.public_id %>/transactions' method='POST'>
                   <div class="group" id='paypalContainer'></div>
-                  <input type='hidden' name='transaction[amount]' value='15.00' />
+                  <input type='hidden' name='transaction[amount]' value='1.00' />
                   <input type='hidden' id='paymentMethodNonce' name='transaction[paymentMethodNonce]' value='true' />
 
                   <label for="card-number">
@@ -219,7 +219,7 @@
       paypal: {
         container: "paypalContainer",
         singleUse: true,
-        amount: 15.00,
+        amount: 1.00,
         currency: 'USD',
         enableShippingAddress: true,
       }
