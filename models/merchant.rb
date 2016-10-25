@@ -1,5 +1,9 @@
 class Merchant < ActiveRecord::Base
   KEY = "Jt4BWW375DkoBaiX22bQRt6xzwnFdUIbTCENxK4lOqw="
+  COUNTRY_TO_CURRENCY = {
+    "USA" => "USD",
+    "GBR" => "GBP",
+  }
 
   validates_presence_of :email
 
@@ -31,6 +35,10 @@ class Merchant < ActiveRecord::Base
 
     cipher = cipher(:encrypt)
     Base64.encode64(cipher.update(raw_string) + cipher.final)
+  end
+
+  def currency_code
+    COUNTRY_TO_CURRENCY.fetch(country_code, COUNTRY_TO_CURRENCY["USA"])
   end
 
   def cipher(method)

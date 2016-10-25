@@ -220,7 +220,7 @@
         container: "paypalContainer",
         singleUse: true,
         amount: 1.00,
-        currency: 'USD',
+        currency: "<%= @merchant.currency_code %>",
         enableShippingAddress: true,
       }
     });
