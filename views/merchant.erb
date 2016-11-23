@@ -124,10 +124,13 @@
               </ol>
 
               <div class="pane-content">
-                <form id="paymentForm" action='/merchant/<%= @merchant.public_id %>/transactions' method='POST'>
-                  <div class="group" id='paypalContainer'></div>
-                  <input type='hidden' name='transaction[amount]' value='1.00' />
-                  <input type='hidden' id='paymentMethodNonce' name='transaction[paymentMethodNonce]' value='true' />
+                <form id="payment-form" action="/merchant/<%= @merchant.public_id %>/transactions" method="POST">
+                  <div class="group paypal-container">
+                    <img id="paypal-checkout" class="paypal-button" src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/checkout-logo-small.png" alt="Check out with PayPal" />
+                  </div>
+
+                  <input type="hidden" name="transaction[amount]" value="1.00" />
+                  <input type="hidden" id="payment-method-nonce" name="transaction[payment-method-nonce]" value="true" />
 
                   <label for="card-number">
                     <span class="label">Card Number</span>
@@ -167,62 +170,102 @@
 
 <% if @client_token %>
   <script>
-    var client = braintree.setup('<%= @client_token %>', 'custom', {
-      id: "paymentForm",
-      hostedFields: {
-        onFieldEvent: function (event) {
-          if(event.type === "fieldStateChange" && !event.isValid){
-            console.log("No go! Clear loading state");
-            app.clearPaymentLoading();
-          }
-        },
-        styles: {
-          "input": {
-            "font-family": '"Open Sans Regular", "Helvetica Neue", "Helvetica", "Arial", Sans-serif',
-            "font-size": "16px",
-            "font-weight": "normal",
-            "color": "#3E3C41"
-          },
-          ":focus": {
-            "color": "#2CA1E9"
-          },
-        },
-        number: {
-          selector: "#card-number"
-        },
-        expirationDate: {
-          selector: "#expiration-date"
-        }
-      },
-      onPaymentMethodReceived: function (event) {
-        var form = $('#paymentForm');
-        var url = form.attr('action');
-        document.getElementById('paymentMethodNonce').value = event.nonce;
-        $.ajax({
-          type: "POST",
-          url: url,
-          data: form.serialize(),
-          success: function(response){
-            console.log(response);
-            if (response.success) {
-              app.showPaymentSuccess();
-            } else {
-              app.clearPaymentLoading();
-              alert('transaction failed: ' + response.errors);
-            }
-          },
-          error: function(error){
-            console.log(error);
-          }
-        });
-      },
-      paypal: {
-        container: "paypalContainer",
-        singleUse: true,
-        amount: 1.00,
-        currency: "<%= @merchant.currency_code %>",
-        enableShippingAddress: true,
+    function submitForm (form) {
+      return $.ajax({
+        type: 'POST',
+        url: form.action,
+        data: new FormData(form),
+        processData: false,
+        contentType: false
+      });
+    }
+
+    function handlePaymentResponse (response) {
+      if (response.success) {
+        app.showPaymentSuccess();
+      } else {
+        app.clearPaymentLoading();
+        window.alert('transaction failed: ' + response.errors);
       }
+    }
+
+    function handleError (error) {
+      console.log(error);
+    }
+
+    braintree.client.create({
+      authorization: '<%= @client_token %>'
+    }, function (err, client) {
+      var form = document.getElementById('payment-form');
+
+      braintree.hostedFields.create({
+        client: client,
+        styles: {
+          'input': {
+            'font-family': '"Open Sans Regular", "Helvetica Neue", "Helvetica", "Arial", Sans-serif',
+            'font-size': '16px',
+            'font-weight': 'normal',
+            'color': '#3E3C41'
+          },
+          ':focus': {
+            'color': '#2CA1E9'
+          },
+        },
+        fields: {
+          number: {
+            selector: '#card-number'
+          },
+          expirationDate: {
+            selector: '#expiration-date'
+          }
+        }
+      }, function (err, hostedFields) {
+        form.addEventListener('submit', function (event) {
+          event.preventDefault();
+
+          hostedFields.tokenize(function (err, payload) {
+            if (err) {
+              app.clearPaymentLoading();
+              return;
+            }
+
+            document.getElementById('payment-method-nonce').value = payload.nonce;
+            submitForm(form)
+              .done(handlePaymentResponse)
+              .fail(handleError);
+          });
+        });
+      });
+
+      braintree.paypal.create({
+        client: client,
+      }, function (err, paypal) {
+        var paypalButton = document.getElementById('paypal-checkout');
+
+        paypalButton.addEventListener('click', function () {
+          paypalButton.setAttribute('disabled', 'disabled');
+
+          paypal.tokenize({
+            flow: 'checkout',
+            amount: 1.00,
+            currency: '<%= @merchant.currency_code %>',
+            enableShippingAddress: true
+          }, function (err, payload) {
+            paypalButton.removeAttribute('disabled');
+
+            if (err) {
+              return;
+            }
+
+            document.getElementById('payment-method-nonce').value = payload.nonce;
+            app.triggerPaymentSubmit();
+
+            submitForm(form)
+              .done(handlePaymentResponse)
+              .fail(handleError);
+          });
+        });
+      });
     });
   </script>
 <% end %>

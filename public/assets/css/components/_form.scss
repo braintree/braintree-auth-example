@@ -168,9 +168,13 @@
       content: 'required';
     }
 
-    &.braintree-hosted-fields-invalid:after,
     &.braintree-hosted-fields-valid:before {
       @include transform(translateY(0px));
+      opacity: 1;
+    }
+
+    &.braintree-hosted-fields-invalid:after {
+      @include transform(translateY(-1em));
       opacity: 1;
     }
   }
@@ -185,10 +189,14 @@
   }
 }
 
-#paypalContainer {
+.paypal-container {
   margin-bottom: 1.5em;
 }
 
-.paypal-button-tag-content {
-  display: none;
+.paypal-button {
+  cursor: pointer;
+
+  &[disabled] {
+    pointer-events: none;
+  }
 }

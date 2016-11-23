@@ -2,7 +2,7 @@ function App(){
   this.$autofocusInput = $('input[autofocus]');
   this.$informationInputs = $('input[type=text], input[type=email]');
   this.$paneToggles = $('.pane .toggle');
-  this.$payForm = $('#paymentForm');
+  this.$payForm = $('#payment-form');
   this.$payButton = $('.button.primary');
   this.$paySuccess = $('.success');
   this.$noticeEnabled = $('.notice-enabled');
@@ -86,6 +86,10 @@ App.prototype.showPaymentSuccess = function(){
   }, 2000);
 };
 
+App.prototype.triggerPaymentSubmit = function () {
+  return this.$payForm.trigger('submit');
+};
+
 App.prototype.labelFocus = function(parent){
   var self = this;
 
@@ -119,7 +123,7 @@ App.prototype.paneToggles = function(){
 
     var toggle = $(this);
     var pane = toggle.parent('.pane');
-    var open = (pane.hasClass(self.openClass)) ? true : false;
+    var open = pane.hasClass(self.openClass);
 
     if (open) {
       self.closePane(pane);
@@ -134,15 +138,6 @@ App.prototype.paneToggles = function(){
       self.closePane(pane);
     };
   });
-
-  // $('html').click(function() {
-  //   var pane = $('.pane');
-  //   self.closePane(pane);
-  // });
-
-  // $('.pane').click(function(event){
-  //   event.stopPropagation();
-  // });
 };
 
 App.prototype.openPane = function(pane){

@@ -1035,12 +1035,19 @@ pre {
     top: 17px; }
   .bar .input:after {
     content: 'required'; }
-  .bar .input.braintree-hosted-fields-invalid:after, .bar .input.braintree-hosted-fields-valid:before {
+  .bar .input.braintree-hosted-fields-valid:before {
     -webkit-transform: translateY(0px);
     -moz-transform: translateY(0px);
     -ms-transform: translateY(0px);
     -o-transform: translateY(0px);
     transform: translateY(0px);
+    opacity: 1; }
+  .bar .input.braintree-hosted-fields-invalid:after {
+    -webkit-transform: translateY(-1em);
+    -moz-transform: translateY(-1em);
+    -ms-transform: translateY(-1em);
+    -o-transform: translateY(-1em);
+    transform: translateY(-1em);
     opacity: 1; }
 .bar .braintree-hosted-fields-invalid {
   border-left-color: #ed574a; }
@@ -1048,11 +1055,13 @@ pre {
   background-color: #FAFDFF;
   border-left-color: #2CA1E9; }
 
-#paypalContainer {
+.paypal-container {
   margin-bottom: 1.5em; }
 
-.paypal-button-tag-content {
-  display: none; }
+.paypal-button {
+  cursor: pointer; }
+  .paypal-button[disabled] {
+    pointer-events: none; }
 
 .notice {
   background-color: #955AED;

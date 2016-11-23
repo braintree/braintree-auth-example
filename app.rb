@@ -44,7 +44,7 @@ get '/merchant/:public_id' do |public_id|
   @merchant = Merchant.find_by(:public_id => public_id)
 
   if @merchant.braintree_access_token.present?
-    @client_token = _merchant_gateway(@merchant).client_token.generate
+    @client_token = _merchant_gateway(@merchant).client_token.generate(:version => 3)
 
     @transactions = _merchant_gateway(@merchant).transaction.search do |search|
       search.created_at >= Time.now - 60*60*24
@@ -72,7 +72,7 @@ post '/merchant/:public_id/transactions' do |public_id|
 
   result = gateway.transaction.sale(
     :amount => params["transaction"]["amount"],
-    :payment_method_nonce => params["transaction"]["paymentMethodNonce"],
+    :payment_method_nonce => params["transaction"]["payment-method-nonce"],
     :options => {
       :submit_for_settlement => true,
     },
