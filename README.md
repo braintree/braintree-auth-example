@@ -7,7 +7,7 @@ To start the application:
 ```
 bundle install
 rake db:migrate
-ruby app.rb
+./scripts/start.sh
 ```
 
 then navigate to `localhost:4567`.
