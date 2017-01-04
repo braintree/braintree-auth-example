@@ -45,6 +45,24 @@ module PrefillData
           },
         }
       )
+    when "FRA"
+      _template.deep_merge(
+        {
+          :user => {
+            :phone => "+33140205050",
+            :country => "FRA",
+          },
+          :business => {
+            :phone => "+33140205050",
+            :currency => "FRA",
+            :street_address => "45 Avenue des Ternes",
+            :postal_code => "75008",
+            :locality => "Paris",
+            :region => "France",
+            :country => "FRA",
+          },
+        }
+      )
     else
       _template
     end

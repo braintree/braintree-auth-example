@@ -3,6 +3,7 @@ class Merchant < ActiveRecord::Base
   COUNTRY_TO_CURRENCY = {
     "USA" => "USD",
     "GBR" => "GBP",
+    "FRA" => "EUR",
   }
 
   validates_presence_of :email
