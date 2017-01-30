@@ -185,7 +185,7 @@
         app.showPaymentSuccess();
       } else {
         app.clearPaymentLoading();
-        window.alert('transaction failed: ' + response.errors);
+        window.alert('transaction failed: ' + JSON.stringify(response.errors));
       }
     }
 
