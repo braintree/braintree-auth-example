@@ -5,13 +5,20 @@ require 'json'
 require 'uri'
 require 'braintree'
 require 'dotenv'
-Dotenv.load
+
+if ENV['ENVIRONMENT'] == "development"
+  Dotenv.load(".development.env")
+else
+  Dotenv.load(".env")
+end
 
 set :database, ENV['DATABASE_URL'] || {:adapter => "sqlite3", :database => "db/development.sqlite3"}
 set :bind, '0.0.0.0'
+set :port, ENV["PORT"]
 
 Dir[File.dirname(__FILE__) + "/models/*.rb"].each { |file| require file }
 
+BRAINTREE_ENVIRONMENT = ENV.fetch("BRAINTREE_ENVIRONMENT", "sandbox")
 # Allows you to set global credentials to restrict access to a public application
 if ENV['PASSWORD']
   use Rack::Auth::Basic, "Restricted Area" do |username, password|
@@ -112,7 +119,7 @@ end
 def _merchant_gateway(merchant)
   Braintree::Gateway.new({
     :access_token => merchant.braintree_access_token,
-    :environment => "sandbox",
+    :environment => BRAINTREE_ENVIRONMENT,
   })
 end
 
@@ -120,6 +127,14 @@ def _oauth_gateway
   Braintree::Gateway.new({
     :client_id => ENV["CLIENT_ID"],
     :client_secret => ENV["CLIENT_SECRET"],
-    :environment => "sandbox",
+    :environment => BRAINTREE_ENVIRONMENT,
+  })
+end
+
+def _api_key_oauth_gateway
+  Braintree::Gateway.new({
+    :public_key => ENV["PUBLIC_KEY"],
+    :private_key => ENV["PRIVATE_KEY"],
+    :environment => BRAINTREE_ENVIRONMENT,
   })
 end
