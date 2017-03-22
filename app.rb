@@ -130,11 +130,3 @@ def _oauth_gateway
     :environment => BRAINTREE_ENVIRONMENT,
   })
 end
-
-def _api_key_oauth_gateway
-  Braintree::Gateway.new({
-    :public_key => ENV["PUBLIC_KEY"],
-    :private_key => ENV["PRIVATE_KEY"],
-    :environment => BRAINTREE_ENVIRONMENT,
-  })
-end
