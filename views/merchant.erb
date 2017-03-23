@@ -232,7 +232,11 @@
             document.getElementById('payment-method-nonce').value = payload.nonce;
             submitForm(form)
               .done(handlePaymentResponse)
-              .fail(handleError);
+              .fail(handleError)
+              .then(function () {
+                hostedFields.clear('number');
+                hostedFields.clear('expirationDate');
+              });
           });
         });
       });

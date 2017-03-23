@@ -82,6 +82,7 @@ App.prototype.showPaymentSuccess = function(){
 
     window.setTimeout(function(){
       self.$noticePayment.addClass(self.showClass);
+      self.$paySuccess.removeClass(self.showClass);
     }, 600);
   }, 2000);
 };
