@@ -115,6 +115,26 @@ get '/callback' do
   redirect to("/merchant/#{merchant.public_id}")
 end
 
+post '/webhooks' do
+  gateway = _api_key_oauth_gateway
+  webhook_notification = gateway.webhook_notification.parse(
+    params[:bt_signature],
+    params[:bt_payload]
+  )
+
+  puts "Webhook fired: #{webhook_notification.kind}"
+
+  case webhook_notification.kind
+  when Braintree::WebhookNotification::Kind::ConnectedMerchantPayPalStatusChanged
+    puts webhook_notification.connected_merchant_paypal_status_changed.oauth_application_client_id
+    puts webhook_notification.connected_merchant_paypal_status_changed.inspect
+  when Braintree::WebhookNotification::Kind::ConnectedMerchantStatusTransitioned
+    puts webhook_notification.connected_merchant_status_transitioned.oauth_application_client_id
+    puts webhook_notification.connected_merchant_status_transitioned.inspect
+  else
+    puts webhook_notification.inspect
+  end
+end
 
 def _merchant_gateway(merchant)
   Braintree::Gateway.new({
@@ -127,6 +147,14 @@ def _oauth_gateway
   Braintree::Gateway.new({
     :client_id => ENV["CLIENT_ID"],
     :client_secret => ENV["CLIENT_SECRET"],
+    :environment => BRAINTREE_ENVIRONMENT,
+  })
+end
+
+def _api_key_oauth_gateway
+  Braintree::Gateway.new({
+    :public_key => ENV["PUBLIC_KEY"],
+    :private_key => ENV["PRIVATE_KEY"],
     :environment => BRAINTREE_ENVIRONMENT,
   })
 end
