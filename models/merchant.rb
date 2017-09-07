@@ -4,6 +4,8 @@ class Merchant < ActiveRecord::Base
     "USA" => "USD",
     "GBR" => "GBP",
     "FRA" => "EUR",
+    "ESP" => "EUR",
+    "ITA" => "EUR",
   }
 
   validates_presence_of :email

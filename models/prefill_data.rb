@@ -54,7 +54,7 @@ module PrefillData
           },
           :business => {
             :phone => "+33140205050",
-            :currency => "FRA",
+            :currency => "EUR",
             :street_address => "45 Avenue des Ternes",
             :postal_code => "75008",
             :locality => "Paris",
@@ -63,12 +63,46 @@ module PrefillData
           },
         }
       )
+    when "ITA"
+      _template.deep_merge(
+        {
+          :user => {
+            :phone => "+390669887203",
+            :country => "ITA",
+          },
+          :business => {
+            :phone => "+390669887203",
+            :currency => "EUR",
+            :street_address => "Piazza San Pietro",
+            :postal_code => "00120",
+            :locality => "Vatican City",
+            :country => "ITA",
+          },
+        }
+      )
+    when "ESP"
+      _template.deep_merge(
+        {
+          :user => {
+            :phone => "+34913984300",
+            :country => "ESP",
+          },
+          :business => {
+            :phone => "+34913984300",
+            :currency => "EUR",
+            :street_address => "Camino Sintra s/n",
+            :postal_code => "28055",
+            :locality => "Madrid",
+            :country => "ESP",
+          },
+        }
+      )
     else
-      _template
+      _template(country_code)
     end
   end
 
-  def self._template
+  def self._template(country_code=nil)
     # full reference: https://developers.braintreepayments.com/guides/braintree-auth/reference/ruby#signup-form-fields
     {
       :user => {
@@ -89,6 +123,7 @@ module PrefillData
         :average_transaction_amount => "10",
         :maximum_transaction_amount => "100",
         :ship_physical_goods => false,
+        :country => country_code,
       },
     }
   end
