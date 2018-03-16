@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -14,15 +13,15 @@
 ActiveRecord::Schema.define(version: 20160809160330) do
 
   create_table "merchants", force: :cascade do |t|
-    t.string   "email"
-    t.string   "encrypted_braintree_access_token"
-    t.string   "encrypted_braintree_refresh_token"
-    t.string   "braintree_id"
-    t.string   "public_id"
-    t.string   "state"
+    t.string "email"
+    t.string "encrypted_braintree_access_token"
+    t.string "encrypted_braintree_refresh_token"
+    t.string "braintree_id"
+    t.string "public_id"
+    t.string "state"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "country_code",                      default: "USA"
+    t.string "country_code", default: "USA"
   end
 
 end
