@@ -10,7 +10,7 @@ rake db:migrate
 ./scripts/start.sh
 ```
 
-then navigate to `localhost:4567`.
+then navigate to `localhost:9393`.
 
 ## Documentation
 
