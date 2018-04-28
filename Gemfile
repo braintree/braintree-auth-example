@@ -17,7 +17,7 @@ gem "sinatra", "1.4.7"
 gem "sinatra-activerecord", "2.0.13"
 gem "rake", "10.4.2"
 
-gem "braintree", "2.54.0"
+gem "braintree", "2.87.0"
 
 gem "unicorn", "4.9.0"
 gem "remote_syslog_logger", "1.0.3"

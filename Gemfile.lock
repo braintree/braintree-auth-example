@@ -13,7 +13,7 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     arel (8.0.0)
-    braintree (2.54.0)
+    braintree (2.87.0)
       builder (>= 2.0.0)
     builder (3.2.3)
     concurrent-ruby (1.0.5)
@@ -55,7 +55,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  braintree (= 2.54.0)
+  braintree (= 2.87.0)
   dotenv (= 2.1.1)
   pg (= 0.18.2)
   rake (= 10.4.2)
@@ -68,4 +68,4 @@ DEPENDENCIES
   unicorn (= 4.9.0)
 
 BUNDLED WITH
-   1.14.6
+   1.16.1
