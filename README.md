@@ -6,13 +6,13 @@ A Ruby/Sinatra application that demonstrates the [Braintree Auth](https://develo
 
 1. Clone this repository
 2. Start the application:
-  - using docker: `docker-compose up`
-  - using your local machine:
-    ```
-    bundle install
-    rake db:migrate
-    ./scripts/start.sh
-    ```
+    - using docker: `docker-compose up`
+    - using your local machine:
+      ```
+      bundle install
+      rake db:migrate
+      ./scripts/start.sh
+      ```
 3. Navigate to `localhost:9393`
 
 ## Documentation
