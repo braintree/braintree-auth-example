@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160809160330) do
+ActiveRecord::Schema.define(version: 20170222155406) do
 
   create_table "merchants", force: :cascade do |t|
     t.string "email"
@@ -19,9 +19,11 @@ ActiveRecord::Schema.define(version: 20160809160330) do
     t.string "braintree_id"
     t.string "public_id"
     t.string "state"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string "country_code", default: "USA"
+    t.string "braintree_public_key"
+    t.string "braintree_private_key"
   end
 
 end

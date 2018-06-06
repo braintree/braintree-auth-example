@@ -1,0 +1,9 @@
+version: '3'
+services:
+  braintree_auth_example:
+    build: '.'
+    command: 'bash -c "rake db:migrate && ./scripts/start.sh"'
+    volumes:
+      - .:/myapp
+    ports:
+      - "9393:9393"
