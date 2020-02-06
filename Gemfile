@@ -13,7 +13,7 @@ group :production do
   gem 'pg', '0.18.2'
 end
 
-gem "sinatra", "2.0.0"
+gem "sinatra", "2.0.2"
 gem "sinatra-activerecord", "2.0.13"
 gem "rake", "10.4.2"
 
