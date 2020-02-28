@@ -16,7 +16,7 @@ end
 
 gem "sinatra", "2.0.2"
 gem "sinatra-activerecord", "2.0.13"
-gem "rake", "10.4.2"
+gem "rake", "12.3.3"
 
 gem "braintree", "2.87.0"
 
