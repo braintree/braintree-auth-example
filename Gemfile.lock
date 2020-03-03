@@ -29,7 +29,7 @@ GEM
     rack-protection (2.0.2)
       rack
     raindrops (0.19.0)
-    rake (10.4.2)
+    rake (12.3.3)
     remote_syslog_logger (1.0.3)
       syslog_protocol
     ruby2_keywords (0.0.2)
@@ -62,7 +62,7 @@ DEPENDENCIES
   braintree (= 2.87.0)
   dotenv (= 2.1.1)
   pg (= 0.18.2)
-  rake (= 10.4.2)
+  rake (= 12.3.3)
   remote_syslog_logger (= 1.0.3)
   sass (= 3.4.22)
   shotgun
