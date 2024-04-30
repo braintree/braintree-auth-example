@@ -4,13 +4,16 @@ A Ruby/Sinatra application that demonstrates the [Braintree Auth](https://develo
 
 To start the application:
 
-```
-bundle install
-rake db:migrate
-./scripts/start.sh
-```
+1. [Configure your OAuth application](https://developer.paypal.com/braintree/docs/guides/extend/oauth/configuration) in sandbox to include a redirect URI of `http://127.0.0.1:9393/callback`
+2. Edit the `.env` file to insert the client id and client secret of your OAuth application in sandbox
+3. Run the application
 
-then navigate to `localhost:9393`.
+    ```
+    bundle install
+    rake db:migrate
+    ./scripts/start.sh
+    ```
+4. Navigate to `localhost:9393`
 
 ## Documentation
 
