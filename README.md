@@ -18,7 +18,3 @@ To start the application:
 ## Documentation
 
 Full documentation is available in the Braintree [developer docs](https://developers.braintreepayments.com/guides/braintree-auth/overview)
-
-## Live Application
-
-This application is currently live on Heroku at https://pseudoshop.herokuapp.com.
